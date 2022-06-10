@@ -29,13 +29,17 @@ class FileStatus;
  * @brief 重复打开文件错误
  *
  */
-class ReopenFileException: std::logic_error {
+class ReopenFileException: public std::logic_error {
 public:
   ReopenFileException(const std::string& msg)
     : std::logic_error{ msg }
   {}
 };
 
+/**
+ * @brief 文件未打开错误
+ *
+ */
 class FileNotOpenedException: public std::logic_error {
 public:
   FileNotOpenedException(const std::string& msg)
@@ -270,8 +274,19 @@ public:
    */
   void mode(int new_mode);
 
+  /**
+   * @brief 改变文件所有权
+   *
+   * @param new_owner
+   * @param group
+   */
   void owner(uid_t new_owner, gid_t group);
 
+  /**
+   * @brief 改变文件大小
+   *
+   * @param new_size
+   */
   void resize(off_t new_size);
 
 private:

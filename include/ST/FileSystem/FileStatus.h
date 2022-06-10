@@ -14,7 +14,11 @@
 
 namespace ST::FileSystem {
 
-class InvalidFileStatus: std::logic_error {
+/**
+ * @brief 无效文件信息错误/无法取得文件信息错误
+ *
+ */
+class InvalidFileStatus: public std::logic_error {
 public:
   InvalidFileStatus(const std::string& msg)
     : std::logic_error{ msg }
