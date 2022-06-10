@@ -21,6 +21,10 @@
 
 namespace ST::FileSystem {
 
+// forward statement
+class FileStatus;
+
+
 /**
  * @brief 重复打开文件错误
  *
@@ -28,6 +32,13 @@ namespace ST::FileSystem {
 class ReopenFileException: std::logic_error {
 public:
   ReopenFileException(const std::string& msg)
+    : std::logic_error{ msg }
+  {}
+};
+
+class FileNotOpenedException: public std::logic_error {
+public:
+  FileNotOpenedException(const std::string& msg)
     : std::logic_error{ msg }
   {}
 };
@@ -163,6 +174,105 @@ public:
    */
   void as_tmpfile();
 
+  /**
+   * @brief 从打开的文件中读取数据
+   *
+   * @param buffer      读出数据所存储的buffer
+   * @param n_bytes     最多读出n_bytes的数据
+   * @return ssize_t    实际读出的数据
+   */
+  ssize_t read(void* buffer, size_t n_bytes) const;
+
+  /**
+   * @brief 向打开的文件中写入数据
+   *
+   * @param buffer      待写入的数据
+   * @param n_bytes     最多写入n_bytes的数据
+   * @return ssize_t    实际写入的数据
+   */
+  ssize_t write(const void* buffer, size_t n_bytes);
+
+  /**
+   * @brief 从offset的地方读出n_bytes的数据，写入到buffer中
+   *
+   * @param buffer      读出的数据写入的buffer
+   * @param n_bytes     最多读出n_bytes的数据
+   * @param offset
+   * @return ssize_t    实际读出的数据
+   */
+  ssize_t pread(void* buffer, size_t n_bytes, off_t offset) const;
+
+  /**
+   * @brief 从打开文件的offset处写入n_bytes的数据，数据源为buffer
+   *
+   * @param buffer      待写入数据
+   * @param n_bytes     最多写入n_bytes数据
+   * @param offset
+   * @return ssize_t    实际写入的数据
+   */
+  ssize_t pwrite(const void* buffer, size_t n_bytes, off_t offset);
+
+  /**
+   * @brief 将系统缓冲区的数据同步到实际的文件里
+   *
+   */
+  void synchronize();
+
+  /**
+   * @brief 只同步文件数据的部分
+   *
+   */
+  void data_synchronize();
+
+  /**
+   * @brief 新增flags
+   *
+   * @param flags
+   */
+  void add_flags(int flags);
+
+  /**
+   * @brief 移除flags
+   *
+   * @param flags
+   */
+  void remove_flags(int flags);
+
+  /**
+   * @brief 定位offset
+   *
+   * @param offset  偏移量
+   * @param whence  标定点
+   * @return off_t  从文件起始的offset
+   */
+  off_t seek(off_t offset, int whence = SEEK_SET);
+
+  /**
+   * @brief 文件信息
+   *
+   * @return FileStatus 文件信息
+   */
+  FileStatus status() const;
+
+  /**
+   * @brief 检查相应权限是否允许
+   *
+   * @param mode      权限
+   * @return true
+   * @return false
+   */
+  bool access(int mode) const;
+
+  /**
+   * @brief
+   *
+   * @param new_mode
+   */
+  void mode(int new_mode);
+
+  void owner(uid_t new_owner, gid_t group);
+
+  void resize(off_t new_size);
 
 private:
   int fd_;
