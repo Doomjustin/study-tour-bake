@@ -17,7 +17,9 @@
   - 在public函数的入口和出口都添加log，level = info
   - 在需要的地方打上对应的log
   - private函数不需要log，特别简单的函数也不需要
-  - log format(spdlog): [%D %T:%e %z][%P: %t]%l: %v
+  - log (spdlog)
+    - pattern: [%Y-%m-%d %H:%M:%S.%e][%^%l%$][%@ %!][%P %t] %v
+    - 为了输出func和文件等信息，所以必须使用macro形式的log接口
 
 ## others
 C++ header template

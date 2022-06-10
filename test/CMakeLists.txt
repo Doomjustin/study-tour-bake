@@ -4,6 +4,9 @@ target_link_libraries(test-third-parties PRIVATE spdlog::spdlog fmt::fmt Boost::
 add_executable(test-catch2 test_catch2.cpp)
 target_link_libraries(test-catch2 PRIVATE Catch2::Catch2WithMain)
 
+add_executable(test-filesystem test_filesystem.cpp)
+target_link_libraries(test-filesystem PRIVATE ST spdlog::spdlog)
+
 # list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 # include(CTest)
 # include(Catch)
