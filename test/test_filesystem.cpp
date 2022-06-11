@@ -15,6 +15,7 @@ int main()
 
   spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] %n [%^%l%$][%@ %!][%P %t] %v");
   spdlog::set_level(spdlog::level::debug);
+
   ST::FileSystem::File file{ "test.file" };
 
   file.open(O_RDONLY);
