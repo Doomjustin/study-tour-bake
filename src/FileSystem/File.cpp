@@ -185,7 +185,7 @@ void File::open(int flags)
 {
   if (opened()) {
     SPDLOG_ERROR("file[{}, {}] has been opened, you shouldn't reopen it", fd_, file_name_);
-    throw ReopenFileException{ "you shouldn't reopen a file" };
+    throw ReopenFileException{ "you shouldn't reopen a file[{}, {}]", fd_, file_name_ };
   }
 
   SPDLOG_INFO("opening file {} with flag {}", file_name_, flags);
@@ -207,7 +207,7 @@ void File::open(int flags, mode_t mode)
 {
   if (opened()) {
     SPDLOG_ERROR("file[{}, {}] has been opened, you shouldn't reopen it", fd_, file_name_);
-    throw ReopenFileException{ "you shouldn't reopen a file" };
+    throw ReopenFileException{ "you shouldn't reopen file[{}, {}]", fd_, file_name_ };
   }
 
   SPDLOG_INFO("opening file {} with flag {}, mode {}", file_name_, flags, mode);

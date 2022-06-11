@@ -17,7 +17,9 @@
 
 #include <string>
 #include <stdexcept>
+#include <utility>
 
+#include <fmt/core.h>
 
 namespace ST::FileSystem {
 
@@ -31,8 +33,9 @@ class FileStatus;
  */
 class ReopenFileException: public std::logic_error {
 public:
-  ReopenFileException(const std::string& msg)
-    : std::logic_error{ msg }
+  template<typename... T>
+  ReopenFileException(fmt::format_string<T...> fmt, T&&... args)
+    : std::logic_error{ fmt::format(fmt, std::forward<T>(args)...) }
   {}
 };
 
@@ -42,8 +45,9 @@ public:
  */
 class FileNotOpenedException: public std::logic_error {
 public:
-  FileNotOpenedException(const std::string& msg)
-    : std::logic_error{ msg }
+  template<typename... T>
+  FileNotOpenedException(fmt::format_string<T...> fmt, T&&... args)
+    : std::logic_error{ fmt::format(fmt, std::forward<T>(args)...) }
   {}
 };
 

@@ -6,8 +6,10 @@
 
 #include <string>
 #include <stdexcept>
+#include <utility>
 
 #include <spdlog/spdlog.h>
+#include <fmt/core.h>
 
 #include "File.h"
 
@@ -20,8 +22,9 @@ namespace ST::FileSystem {
  */
 class InvalidFileStatus: public std::logic_error {
 public:
-  InvalidFileStatus(const std::string& msg)
-    : std::logic_error{ msg }
+  template<typename... T>
+  InvalidFileStatus(fmt::format_string<T...> fmt, T&&... args)
+    : std::logic_error{ fmt::format(fmt, std::forward<T>(args)...) }
   {}
 };
 
@@ -36,7 +39,7 @@ public:
     auto res = ::lstat(file_name.c_str(), &status_);
     if (res == -1) {
       SPDLOG_ERROR("can't get file[{}] status", file_name);
-      throw InvalidFileStatus{ "can't get file status" };
+      throw InvalidFileStatus{ "can't get file[{}] status", file_name };
     }
 
     SPDLOG_INFO("got file[{}] status", file_name);
