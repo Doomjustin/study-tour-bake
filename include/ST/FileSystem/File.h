@@ -293,10 +293,57 @@ public:
    */
   void resize(off_t new_size);
 
+  /**
+   * @brief 对文件加读锁
+   *
+   * @param offset
+   * @param whence
+   * @param len
+   */
+  void read_lock(off_t offset = 0, int whence = SEEK_SET, off_t len = 0);
+
+  /**
+   * @brief 对文件加写锁
+   *
+   * @param offset
+   * @param whence
+   * @param len
+   */
+  void readw_lock(off_t offset = 0, int whence = SEEK_SET, off_t len = 0);
+
+  /**
+   * @brief 对文件加写锁
+   *
+   * @param offset
+   * @param whence
+   * @param len
+   */
+  void write_lock(off_t offset = 0, int whence = SEEK_SET, off_t len = 0);
+
+  /**
+   * @brief 对文件加写锁
+   *
+   * @param offset
+   * @param whence
+   * @param len
+   */
+  void writew_lock(off_t offset = 0, int whence = SEEK_SET, off_t len = 0);
+
+  /**
+   * @brief 接触文件锁
+   *
+   * @param offset
+   * @param whence
+   * @param len
+   */
+  void un_lock(off_t offset = 0, int whence = SEEK_SET, off_t len = 0 );
+
 private:
   int fd_;
   // TODO: 考虑换成path
   std::string file_name_;
+
+  void lock_file(int cmd, int type, off_t offset, int whence, off_t len);
 };
 
 } // namespace ST::FileSystem

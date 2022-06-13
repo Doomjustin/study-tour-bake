@@ -76,7 +76,7 @@ public:
     if (pid_ == 0) {
       std::invoke(std::forward<Function>(f), std::forward<Args>(args)...);
       // 必须直接退出子进程
-      exit(0);
+      exit(EXIT_SUCCESS);
     }
   }
 

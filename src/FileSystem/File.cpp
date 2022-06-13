@@ -514,4 +514,56 @@ void File::resize(off_t new_size)
   SPDLOG_INFO("changed file {} size to {}", file_name_, new_size);
 }
 
+void File::lock_file(int cmd, int type, off_t offset, int whence, off_t len)
+{
+  if (!opened()) {
+    SPDLOG_ERROR("can't lock an unopened file");
+    throw FileNotOpenedException{ "can't lock an unopened file" };
+  }
+
+  SPDLOG_INFO("locking file", file_name_);
+
+  struct flock lock;
+  lock.l_type = type;
+  lock.l_start = offset;
+  lock.l_whence = whence;
+  lock.l_len = len;
+
+  auto res = fcntl(fd_, cmd, &lock);
+  if (res == -1) {
+    SPDLOG_ERROR("can't lock file {}", file_name_);
+    throw std::system_error{ errno,
+          std::generic_category(),
+          "can't lock file" };
+  }
+
+  SPDLOG_INFO("locked file", file_name_);
+}
+
+
+void File::read_lock(off_t offset, int whence, off_t len)
+{
+  lock_file(F_SETLK, F_RDLCK, offset, whence, len);
+}
+
+void File::readw_lock(off_t offset, int whence, off_t len)
+{
+  lock_file(F_SETLKW, F_RDLCK, offset, whence, len);
+}
+
+void File::write_lock(off_t offset, int whence, off_t len)
+{
+  lock_file(F_SETLK, F_WRLCK, offset, whence, len);
+}
+
+void File::writew_lock(off_t offset, int whence, off_t len)
+{
+  lock_file(F_SETLKW, F_WRLCK, offset, whence, len);
+}
+
+void File::un_lock(off_t offset, int whence, off_t len)
+{
+  lock_file(F_SETLK, F_UNLCK, offset, whence, len);
+}
+
 } // namespace ST::FileSystem
