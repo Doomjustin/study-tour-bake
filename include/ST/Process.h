@@ -5,23 +5,14 @@
 
 #include <utility>
 #include <functional>
-#include <stdexcept>
 #include <string>
+
+#include <spdlog/spdlog.h>
+
+#include "ST/Exception.h"
 
 
 namespace ST {
-
-/**
- * @brief 无效wait调用，当前进程未运行
- *
- */
-class InvalidProcessWaitException: public std::logic_error {
-public:
-  InvalidProcessWaitException(const std::string& msg)
-    : std::logic_error{ msg }
-  {}
-};
-
 
 class ProcessResult {
 public:
@@ -51,7 +42,6 @@ private:
   int status_;
   bool initialized_;
 };
-
 
 /**
  * @brief 进程控制相关
@@ -90,11 +80,14 @@ public:
 
   ProcessResult wait();
 
+  constexpr pid_t get_pid() const noexcept { return pid_; }
+
+  bool is_waited() const noexcept { return waited_; }
+
 private:
   pid_t pid_;
   bool waited_;
 };
-
 
 namespace ThisProcess {
 

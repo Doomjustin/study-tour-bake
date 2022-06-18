@@ -1,0 +1,11 @@
+add_library(Net
+  OBJECT
+    ${PROJECT_SOURCE_DIR}/include/ST/Net/Address.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Net/IPv4Address.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Net/IPv6Address.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Net/Socket.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Net/Channel.h
+    IPv4Address.cpp
+    IPv6Address.cpp
+    Socket.cpp
+)

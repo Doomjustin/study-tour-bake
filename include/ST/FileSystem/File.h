@@ -16,40 +16,15 @@
 #include <fcntl.h>
 
 #include <string>
-#include <stdexcept>
 #include <utility>
 
-#include <fmt/core.h>
+#include "ST/Exception.h"
+
 
 namespace ST::FileSystem {
 
 // forward statement
 class FileStatus;
-
-
-/**
- * @brief 重复打开文件错误
- *
- */
-class ReopenFileException: public std::logic_error {
-public:
-  template<typename... T>
-  ReopenFileException(fmt::format_string<T...> fmt, T&&... args)
-    : std::logic_error{ fmt::format(fmt, std::forward<T>(args)...) }
-  {}
-};
-
-/**
- * @brief 文件未打开错误
- *
- */
-class FileNotOpenedException: public std::logic_error {
-public:
-  template<typename... T>
-  FileNotOpenedException(fmt::format_string<T...> fmt, T&&... args)
-    : std::logic_error{ fmt::format(fmt, std::forward<T>(args)...) }
-  {}
-};
 
 /**
  * @brief 封装Unix中和file相关的操作

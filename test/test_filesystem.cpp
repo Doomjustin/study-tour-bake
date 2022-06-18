@@ -5,7 +5,8 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-#include "ST/FileSystem.h"
+#include "ST/FileSystem/File.h"
+#include "ST/FileSystem/FileStatus.h"
 
 
 int main()
