@@ -31,12 +31,7 @@ public:
 
   // void on_received();
 
-  std::shared_ptr<Socket> self() const noexcept;
-  std::shared_ptr<Socket> other() const noexcept;
-
 private:
-  std::shared_ptr<Socket> self_;
-  std::shared_ptr<Socket> other_;
 };
 
 } // namespace ST

@@ -9,6 +9,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include "ST/Signal.h"
+
 
 namespace ST {
 
@@ -24,12 +26,12 @@ ProcessResult Process::wait()
     throw InvalidProcessWaitException{ "invalid process waiting because process is not runnnig" };
   }
 
-  if (waited_ == false) {
+  if (waited_ == true) {
     SPDLOG_ERROR("you can't wait for a process twice or more");
     throw InvalidProcessWaitException{ "you can't wait for a process twice or more" };
   }
 
-  SPDLOG_INFO("waiting for process {}", pid_);
+  SPDLOG_INFO("waiting for process[{}]", pid_);
 
   int process_status;
   auto res = ::waitpid(pid_, &process_status, 0);
@@ -41,8 +43,24 @@ ProcessResult Process::wait()
   waited_ = true;
   ProcessResult process_result{ process_status };
 
-  SPDLOG_INFO("waited for process {}", pid_);
+  SPDLOG_INFO("waited for process[{}]", pid_);
   return process_result;
+}
+
+
+void sig_child(int signo)
+{
+  int stat;
+  pid_t pid;
+  while ((pid = waitpid(-1, &stat, WNOHANG)) > 0)
+    SPDLOG_INFO("child {} terminated", pid);
+
+  return;
+}
+
+void Process::auto_remove()
+{
+  Signal(SIGCHLD, sig_child);
 }
 
 

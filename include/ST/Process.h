@@ -64,10 +64,16 @@ public:
 
     // 只处理子进程
     if (pid_ == 0) {
+      SPDLOG_INFO("child process started");
+
       std::invoke(std::forward<Function>(f), std::forward<Args>(args)...);
+
+      SPDLOG_INFO("child process finished");
       // 必须直接退出子进程
       exit(EXIT_SUCCESS);
     }
+
+    SPDLOG_INFO("created child process[{}]", pid_);
   }
 
   Process(const Process& other) = delete;
@@ -83,6 +89,9 @@ public:
   constexpr pid_t get_pid() const noexcept { return pid_; }
 
   bool is_waited() const noexcept { return waited_; }
+
+  // 自动删除僵尸进程
+  static void auto_remove();
 
 private:
   pid_t pid_;

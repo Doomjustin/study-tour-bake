@@ -14,7 +14,7 @@ namespace ST::Net {
 constexpr static int DEFAULT_BACK_LOG = 5;
 
 /**
- * @brief 提供所有和socket相关的操作，用户不应该使用这么底层类
+ * @brief 提供所有和socket相关的操作，不应该由用户调用
  *
  */
 class Socket {
@@ -33,10 +33,12 @@ public:
   // 自动销毁
   ~Socket();
 
+  int fd() const noexcept { return fd_; }
+
   bool is_connected() const noexcept { return connect_address_ != nullptr; }
   void connect(const std::string& address, in_port_t port);
 
-  bool is_binded() const noexcept { return bind_address_ != nullptr; }
+  bool is_binded() const noexcept { return self_address_ != nullptr; }
   void bind(const std::string& address, in_port_t port);
   void bind(in_port_t port);
 
@@ -52,7 +54,7 @@ public:
   // void receive(void* buffer, size_t size);
 
   std::weak_ptr<Address> connect_address() const noexcept { return connect_address_; }
-  std::weak_ptr<Address> bind_address() const noexcept { return bind_address_; }
+  std::weak_ptr<Address> self_address() const noexcept { return self_address_; }
 
   Family family() const noexcept { return family_; }
   Type type() const noexcept { return type_; }
@@ -64,7 +66,7 @@ private:
   Type type_;
   Protocol protocol_;
   std::shared_ptr<Address> connect_address_;
-  std::shared_ptr<Address> bind_address_;
+  std::shared_ptr<Address> self_address_;
 
   void bind(std::shared_ptr<Address> address);
   void connect(std::shared_ptr<Address> address);

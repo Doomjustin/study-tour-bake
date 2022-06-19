@@ -19,7 +19,7 @@ Socket::Socket(Family family, Type type, Protocol protocol)
     type_{ type },
     protocol_{ protocol },
     connect_address_{ nullptr },
-    bind_address_{ nullptr }
+    self_address_{ nullptr }
 {
   fd_ = ::socket(to_int(family), to_int(type), to_int(protocol));
   if (fd_ == -1) {
@@ -27,14 +27,18 @@ Socket::Socket(Family family, Type type, Protocol protocol)
           to_string(family), to_string(type), to_string(protocol));
     throw std::system_error{ errno, std::generic_category(), "can't open socket" };
   }
+  SPDLOG_INFO("created Socket[{}]", fd_);
 }
 
 Socket::~Socket()
 {
+  if (fd_ == -1) return;
+  
   auto res = ::close(fd_);
   if (res == -1)
     SPDLOG_ERROR("can't close socket[fd = {}]", fd_);
 
+  SPDLOG_INFO("Socket[{}] closed", fd_);
   fd_ = -1;
 }
 
@@ -56,7 +60,7 @@ void Socket::connect(const std::string& address, in_port_t port)
 
 void Socket::connect(std::shared_ptr<Address> address)
 {
-  SPDLOG_INFO("connecting to address[]", address->to_string());
+  SPDLOG_INFO("connecting to address[{}]", address->to_string());
 
   auto res = ::connect(fd_, address->address(), address->length());
   if (res == -1) {
@@ -67,7 +71,7 @@ void Socket::connect(std::shared_ptr<Address> address)
 
   connect_address_ = address;
 
-  SPDLOG_INFO("connected to address[]", address->to_string());
+  SPDLOG_INFO("connected to address[{}]", address->to_string());
 }
 
 void Socket::bind(const std::string& address, in_port_t port)
@@ -102,7 +106,7 @@ void Socket::bind(in_port_t port)
 
 void Socket::bind(std::shared_ptr<Address> address)
 {
-  SPDLOG_INFO("binding to address[]", address->to_string());
+  SPDLOG_INFO("binding to address[{}]", address->to_string());
 
   auto res = ::bind(fd_, address->address(), address->length());
   if (res == -1) {
@@ -110,24 +114,24 @@ void Socket::bind(std::shared_ptr<Address> address)
     throw std::system_error{ errno, std::generic_category(),
           "can't bind" };
   }
-  bind_address_ = address;
+  self_address_ = address;
 
-  SPDLOG_INFO("binding to address[]", address->to_string());
+  SPDLOG_INFO("binded to address[{}]", address->to_string());
 }
 
 void Socket::listen(int backlog)
 {
   // static_assert(bind_address_ != nullptr, "you shouln't listen before bind");
-  SPDLOG_INFO("listening on address[]", bind_address_->to_string());
+  SPDLOG_INFO("listening on address[{}]", self_address_->to_string());
 
   auto res = ::listen(fd_, backlog);
   if (res == -1) {
-    SPDLOG_ERROR("listen no address[{}] error: {}", bind_address_->to_string(), strerror(errno));
+    SPDLOG_ERROR("listen no address[{}] error: {}", self_address_->to_string(), strerror(errno));
     throw std::system_error{ errno, std::generic_category(),
           "can't listen" };
   }
 
-  SPDLOG_INFO("listened on address[]", bind_address_->to_string());
+  SPDLOG_INFO("listened on address[{}]", self_address_->to_string());
 }
 
 Socket Socket::accept()

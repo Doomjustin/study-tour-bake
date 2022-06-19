@@ -1,4 +1,4 @@
-#include "ST/APUE.h"
+#include "ST/Exercise.h"
 
 
 void daemonize(const char* cmd)
@@ -89,6 +89,34 @@ ssize_t writen(int fd, char* buf, size_t nbytes)
   }
 
   return nbytes - nleft;
+}
+
+ssize_t read_line(int fd, void* buffer, size_t max_line)
+{
+  char* ptr = (char*) buffer;
+  ssize_t n;
+  ssize_t read_bytes;
+  char c;
+  for (n = 1; n < max_line; ++n) {
+  again:
+    if ((read_bytes = read(fd, &c, 1)) == 1) {
+      *ptr++ = c;
+      if (c == '\n')
+        break;
+    }
+    else if (read_bytes == 0) {
+      *ptr = 0;
+      return n - 1;
+    }
+    else {
+      if (errno == EINTR)
+        goto again;
+      return -1;
+    }
+  }
+
+  *ptr = 0;
+  return n;
 }
 
 static void err_doit(int errno_flag, int error_no, const char* fmt, va_list ap)

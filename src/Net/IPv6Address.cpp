@@ -50,7 +50,7 @@ std::string IPv6Address::to_string() const noexcept
 
   inet_ntop(AF_INET6, &address_.sin6_addr, buffer, MAX_BUFFER);
 
-  return fmt::format("type: IPv6, {}: {}", buffer, address_.sin6_port);
+  return fmt::format("type: IPv6, {}: {}", buffer, byte_order_cast<host>(address_.sin6_port));
 }
 
 } // namespace ST::Net

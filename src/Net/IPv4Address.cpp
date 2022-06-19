@@ -50,7 +50,7 @@ std::string IPv4Address::to_string() const noexcept
 
   inet_ntop(AF_INET, &address_.sin_addr, buffer, MAX_BUFFER);
 
-  return fmt::format("type: IPv4, {}: {}", buffer, address_.sin_port);
+  return fmt::format("type: IPv4, {}: {}", buffer, byte_order_cast<host>(address_.sin_port));
 }
 
 } // namespace ST::Net
