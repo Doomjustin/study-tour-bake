@@ -10,6 +10,9 @@ target_link_libraries(test-filesystem PRIVATE ST)
 add_executable(test-byte-order-cast test_byte_order_cast.cpp)
 target_link_libraries(test-byte-order-cast PRIVATE ST)
 
+add_executable(test-selector test_selector.cpp)
+target_link_libraries(test-selector PRIVATE ST)
+
 # list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 # include(CTest)
 # include(Catch)

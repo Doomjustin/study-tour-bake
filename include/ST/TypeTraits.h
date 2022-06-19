@@ -2,6 +2,8 @@
 #define STUDY_TOUR_TYPE_TRAITS_H
 
 #include <type_traits>
+#include <cstddef>
+#include <cstdint>
 
 
 namespace ST {
@@ -45,6 +47,35 @@ using is_tcp = std::enable_if_t<std::is_same_v<Type, TCP>, bool>;
 
 template<typename Type>
 using is_udp = std::enable_if_t<std::is_same_v<Type, UDP>, bool>;
+
+// 任何小于等于32位的整数值
+template<typename T>
+struct is_less_than_32bit_integer: std::false_type {};
+
+template<>
+struct is_less_than_32bit_integer<char>: std::true_type {};
+
+template<>
+struct is_less_than_32bit_integer<short>: std::true_type {};
+
+template<>
+struct is_less_than_32bit_integer<int>: std::true_type {};
+
+template<>
+struct is_less_than_32bit_integer<std::uint8_t>: std::true_type {};
+
+template<>
+struct is_less_than_32bit_integer<std::uint16_t>: std::true_type {};
+
+template<>
+struct is_less_than_32bit_integer<std::uint32_t>: std::true_type {};
+
+template<typename T>
+inline constexpr bool is_less_than_32bit_integer_v = is_less_than_32bit_integer<T>::value;
+
+// 任何小于等于32位的整数值都可以作为fd
+template<typename T>
+inline constexpr bool is_fd_type_v = is_less_than_32bit_integer_v<T>;
 
 } // namespace ST
 

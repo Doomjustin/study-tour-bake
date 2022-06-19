@@ -83,6 +83,15 @@ public:
   {}
 };
 
+
+class ResetFileDescriptorException: public std::logic_error {
+public:
+  template<typename... T>
+  ResetFileDescriptorException(fmt::format_string<T...> fmt, T&&... args)
+    : std::logic_error{ fmt::format(fmt, std::forward<T>(args)...) }
+  {}
+};
+
 } // namespace ST
 
 #endif // STUDY_TOUR_EXCEPTION_H

@@ -5,7 +5,9 @@ add_library(Net
     ${PROJECT_SOURCE_DIR}/include/ST/Net/IPv6Address.h
     ${PROJECT_SOURCE_DIR}/include/ST/Net/Socket.h
     ${PROJECT_SOURCE_DIR}/include/ST/Net/Channel.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Net/Selector.h
     IPv4Address.cpp
     IPv6Address.cpp
     Socket.cpp
+    Selector.cpp
 )
