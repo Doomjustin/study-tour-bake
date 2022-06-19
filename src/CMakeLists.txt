@@ -7,6 +7,8 @@ add_library(ST
     ${PROJECT_SOURCE_DIR}/include/ST/APUE.h
     ${PROJECT_SOURCE_DIR}/include/ST/TypeTraits.h
     ${PROJECT_SOURCE_DIR}/include/ST/Global.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Cast.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Singleton.h
     ${PROJECT_SOURCE_DIR}/include/ST/Exception.h
     Process.cpp
     APUE.cpp

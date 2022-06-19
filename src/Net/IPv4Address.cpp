@@ -7,6 +7,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include "ST/Cast.h"
+
 
 namespace ST::Net {
 
@@ -21,7 +23,8 @@ IPv4Address::IPv4Address(const std::string& address, in_port_t port)
 {
   bzero(&address_, sizeof(address_));
   address_.sin_family = AF_INET;
-  address_.sin_port = htons(port);
+  // address_.sin_port = htons(port);
+  address_.sin_port = byte_order_cast<net>(port);
   auto res = inet_pton(AF_INET, address.c_str(), &address_.sin_addr);
   if (res == -1) {
     SPDLOG_ERROR("can't convert address[{}] from text to binary form", address);
@@ -35,7 +38,8 @@ IPv4Address::IPv4Address(in_port_t port)
 {
   bzero(&address_, sizeof(address_));
   address_.sin_family = AF_INET;
-  address_.sin_port = htons(port);
+  // address_.sin_port = htons(port);
+  address_.sin_port = byte_order_cast<net>(port);
   address_.sin_addr.s_addr = htonl(INADDR_ANY);
 }
 
@@ -46,7 +50,7 @@ std::string IPv4Address::to_string() const noexcept
 
   inet_ntop(AF_INET, &address_.sin_addr, buffer, MAX_BUFFER);
 
-  return fmt::format("type: IPv4, address: {}, port: {}", buffer, address_.sin_port);
+  return fmt::format("type: IPv4, {}: {}", buffer, address_.sin_port);
 }
 
 } // namespace ST::Net

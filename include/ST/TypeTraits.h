@@ -14,6 +14,16 @@ using is_singletonable = std::enable_if_t<
       std::is_constructible_v<T, Args...>, bool>;
 
 
+// 仅做标识
+struct net {};
+// 仅做标识
+struct host {};
+
+template<typename End>
+using is_end = std::enable_if_t<std::is_same_v<End, ST::net> ||
+      std::is_same_v<End, ST::host>, bool>;
+
+
 // 辅助说明类：IPv4
 struct IPv4 {};
 // 辅助说明类：IPv6

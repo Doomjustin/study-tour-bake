@@ -7,6 +7,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include "ST/Cast.h"
+
 
 namespace ST::Net {
 
@@ -21,7 +23,8 @@ IPv6Address::IPv6Address(const std::string& address, in_port_t port)
 {
   bzero(&address_, sizeof(address_));
   address_.sin6_family = AF_INET6;
-  address_.sin6_port = htons(port);
+  // address_.sin6_port = htons(port);
+  address_.sin6_port = byte_order_cast<net>(port);
   auto res = inet_pton(AF_INET6, address.c_str(), &address_.sin6_addr);
   if (res == -1) {
     SPDLOG_ERROR("can't convert address[{}] from text to binary form", address);
@@ -35,8 +38,9 @@ IPv6Address::IPv6Address(in_port_t port)
 {
   bzero(&address_, sizeof(address_));
   address_.sin6_family = AF_INET6;
-  address_.sin6_port = htons(port);
-  address_.sin6_addr = IN6ADDR_ANY_INIT;
+  // address_.sin6_port = htons(port);
+  address_.sin6_port = byte_order_cast<net>(port);
+  address_.sin6_addr = in6addr_any;
 }
 
 
@@ -46,7 +50,7 @@ std::string IPv6Address::to_string() const noexcept
 
   inet_ntop(AF_INET6, &address_.sin6_addr, buffer, MAX_BUFFER);
 
-  return fmt::format("type: IPv6, address: {}, port: {}", buffer, address_.sin6_port);
+  return fmt::format("type: IPv6, {}: {}", buffer, address_.sin6_port);
 }
 
 } // namespace ST::Net

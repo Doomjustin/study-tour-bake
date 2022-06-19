@@ -44,6 +44,13 @@ std::string to_string(Type type);
 
 std::string to_string(Protocol protocol);
 
+enum Endian {
+  LittileEndian,
+  BigEndian
+};
+
+Endian get_endian();
+
 } // namespace ST::Net
 
 #endif // STUDY_TOUR_GLOBAL_H

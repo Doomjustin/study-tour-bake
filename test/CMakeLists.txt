@@ -7,6 +7,9 @@ target_link_libraries(test-catch2 PRIVATE Catch2::Catch2WithMain)
 add_executable(test-filesystem test_filesystem.cpp)
 target_link_libraries(test-filesystem PRIVATE ST)
 
+add_executable(test-byte-order-cast test_byte_order_cast.cpp)
+target_link_libraries(test-byte-order-cast PRIVATE ST)
+
 # list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 # include(CTest)
 # include(Catch)
