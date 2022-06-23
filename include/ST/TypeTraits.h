@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <cstddef>
 #include <cstdint>
+#include <chrono>
 
 
 namespace ST {
@@ -76,6 +77,25 @@ inline constexpr bool is_less_than_32bit_integer_v = is_less_than_32bit_integer<
 // 任何小于等于32位的整数值都可以作为fd
 template<typename T>
 inline constexpr bool is_fd_type_v = is_less_than_32bit_integer_v<T>;
+
+
+template<typename Clock>
+struct is_steady_clock: std::false_type {};
+
+template<>
+struct is_steady_clock<std::chrono::steady_clock>: std::true_type {};
+
+template<typename Clock>
+static constexpr bool is_steady_clock_v = is_steady_clock<Clock>::value;
+
+template<typename Clock>
+struct is_system_clock: std::false_type {};
+
+template<>
+struct is_system_clock<std::chrono::system_clock>: std::true_type {};
+
+template<typename Clock>
+static constexpr bool is_system_clock_v = is_system_clock<Clock>::value;
 
 } // namespace ST
 

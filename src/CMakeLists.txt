@@ -11,6 +11,9 @@ add_library(ST
     ${PROJECT_SOURCE_DIR}/include/ST/Singleton.h
     ${PROJECT_SOURCE_DIR}/include/ST/Exception.h
     ${PROJECT_SOURCE_DIR}/include/ST/Signal.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Scheduler.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Timer.h
+    ${PROJECT_SOURCE_DIR}/include/ST/Concept.h
     Process.cpp
     Exercise.cpp
     Global.cpp

@@ -6,13 +6,12 @@
 
 #include <type_traits>
 #include <algorithm>
-#include <unordered_set>
+#include <vector>
 
 #include <spdlog/spdlog.h>
 
 #include "ST/Exception.h"
 #include "ST/TypeTraits.h"
-
 
 namespace ST::Net {
 
@@ -63,14 +62,14 @@ public:
     remove_exception_set_aux(fd...);
   }
 
-  std::unordered_set<int> readable_sets() const { return readable_sets_; }
-  std::unordered_set<int> writable_sets() const { return writable_sets_; }
-  std::unordered_set<int> has_exception_sets() const { return has_exception_sets_; }
+  std::vector<int> readable_sets() const;
+  std::vector<int> writable_sets() const;
+  std::vector<int> has_exception_sets() const;
 
   // 拿到的是上一次wait_for的结果
-  std::unordered_set<int> read_sets() const { return existing_read_sets_; }
-  std::unordered_set<int> write_sets() const { return existing_write_sets_; }
-  std::unordered_set<int> exception_sets() const { return existing_exception_sets_; }
+  std::vector<int> read_sets() const;
+  std::vector<int> write_sets() const;
+  std::vector<int> exception_sets() const;
 
   void clear();
   void clear_read_sets();
@@ -86,12 +85,12 @@ private:
   fd_set exception_sets_;
   int max_fd_;
   struct timeval wait_for_;
-  std::unordered_set<int> existing_write_sets_;
-  std::unordered_set<int> existing_read_sets_;
-  std::unordered_set<int> existing_exception_sets_;
-  std::unordered_set<int> readable_sets_;
-  std::unordered_set<int> writable_sets_;
-  std::unordered_set<int> has_exception_sets_;
+  fd_set existing_write_sets_;
+  fd_set existing_read_sets_;
+  fd_set existing_exception_sets_;
+  fd_set readable_sets_;
+  fd_set writable_sets_;
+  fd_set has_exception_sets_;
 
   // 维护已经放入的所有fd
   void update();
@@ -190,7 +189,6 @@ private:
   void add_exception_set_aux() {}
   void remove_exception_set_aux() {}
 };
-
 } // namespace ST
 
 #endif // STUDY_TOUR_NET_SELECTOR_H

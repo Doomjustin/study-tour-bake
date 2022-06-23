@@ -24,14 +24,13 @@ public:
 
   ~Channel() = default;
 
+  void receive_event();
 
-  // ssize_t send();
-
-  // ssize_t receive();
-
-  // void on_received();
+  void send_event();
 
 private:
+  std::unique_ptr<Socket> self_;
+  std::unique_ptr<Socket> other_;
 };
 
 } // namespace ST
