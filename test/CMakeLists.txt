@@ -1,5 +1,7 @@
+link_libraries(spdlog::spdlog fmt::fmt)
+
 add_executable(test-third-parties test_third_parties.cpp)
-target_link_libraries(test-third-parties PRIVATE spdlog::spdlog fmt::fmt Boost::regex)
+target_link_libraries(test-third-parties PRIVATE Boost::regex)
 
 add_executable(test-catch2 test_catch2.cpp)
 target_link_libraries(test-catch2 PRIVATE Catch2::Catch2WithMain)
