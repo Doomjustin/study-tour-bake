@@ -26,10 +26,10 @@ C++ header template
 #define STUDY_TOUR_TEMPLATE_H
 
 
-namespace ST {
+namespace st {
 
 
-} // namespace ST
+} // namespace st
 
 #endif // STUDY_TOUR_TEMPLATE_H
 ```
